@@ -1,18 +1,20 @@
 #include <pebble.h>
 
 static Window *window;
-static TextLayer *text_layer;
+static TextLayer *DigitLayer;
+static TextLayer *OperatorLayer;
+static TextLayer *QueryLayer;
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Select");
+  text_layer_set_text(QueryLayer, "Select");
 }
 
 static void up_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Up");
+  text_layer_set_text(QueryLayer, "Up");
 }
 
 static void down_click_handler(ClickRecognizerRef recognizer, void *context) {
-  text_layer_set_text(text_layer, "Down");
+  text_layer_set_text(QueryLayer, "Down");
 }
 
 static void click_config_provider(void *context) {
@@ -25,14 +27,22 @@ static void window_load(Window *window) {
   Layer *window_layer = window_get_root_layer(window);
   GRect bounds = layer_get_bounds(window_layer);
 
-  text_layer = text_layer_create((GRect) { .origin = { 0, 72 }, .size = { bounds.size.w, 20 } });
-  text_layer_set_text(text_layer, "Press a button");
-  text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
-  layer_add_child(window_layer, text_layer_get_layer(text_layer));
+  DigitLayer = text_layer_create((GRect) { .origin = { 0, 10 }, .size = { bounds.size.w, 20 } });
+  QueryLayer = text_layer_create((GRect) { .origin = { 100, 10 }, .size = { bounds.size.w, 20 } });
+  OperatorLayer = text_layer_create((GRect) { .origin = { 200, 10 }, .size = { bounds.size.w, 20 } });
+
+  text_layer_set_text(QueryLayer, "Press a button");
+  text_layer_set_text_alignment(QueryLayer, GTextAlignmentCenter);
+
+  layer_add_child(window_layer, text_layer_get_layer(DigitLayer));
+  layer_add_child(window_layer, text_layer_get_layer(QueryLayer));
+  layer_add_child(window_layer, text_layer_get_layer(OperatorLayer));
 }
 
 static void window_unload(Window *window) {
-  text_layer_destroy(text_layer);
+  text_layer_destroy(DigitLayer);
+  text_layer_destroy(OperatorLayer);
+  text_layer_destroy(QueryLayer);
 }
 
 static void init(void) {
