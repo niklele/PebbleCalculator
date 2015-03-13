@@ -1,3 +1,7 @@
+
+# Ignore build generated files
+build
+
 # Object files
 *.o
 *.ko

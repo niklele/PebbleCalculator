@@ -1,0 +1,19 @@
+{
+  "uuid": "e51210ef-a9d8-4e10-904f-6d750926c521",
+  "shortName": "PebbleCalculator",
+  "longName": "PebbleCalculator",
+  "companyName": "MakeAwesomeHappen",
+  "versionCode": 1,
+  "versionLabel": "1.0",
+  "sdkVersion": "3",
+  "targetPlatforms": ["aplite", "basalt"],
+  "watchapp": {
+    "watchface": false
+  },
+  "appKeys": {
+    "dummy": 0
+  },
+  "resources": {
+    "media": []
+  }
+}
