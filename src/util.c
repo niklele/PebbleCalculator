@@ -1,25 +1,25 @@
 #include "util.h"
 
-bool QueryAdd(Query *query, Element *elem) {
-  if (query->numElems == QUERY_MAX_SIZE) {
+bool ExpressionAdd(Expression *expr, Element *elem) {
+  if (expr->numElems == EXPRESSION_MAX_SIZE) {
     return false;
   } else {
-    query->elems[query->numElems] = *elem;
-    query->numElems++;
+    Expression->elems[expr->numElems] = *elem;
+    Expression->numElems++;
     return true;
   }
 }
 
-char *ToString(Query *query) {
-  char *buf = (char *) malloc(query->numElems);
-  for (uint8_t i = 0; i < query->numElems; ++i) {
-    buf[i] = query->elems[i].ch;
+char *ToString(Expression *expr) {
+  char *buf = (char *) malloc(expr->numElems);
+  for (uint8_t i = 0; i < expr->numElems; ++i) {
+    buf[i] = expr->elems[i].ch;
   }
-  buf[query->numElems] = '\0';
+  buf[expr->numElems] = '\0';
   return buf;
 }
 
-double Compute(Query *query) {
+double Compute(Expression *expr) {
   return 0.0;
 }
 
