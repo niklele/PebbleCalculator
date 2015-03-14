@@ -1,19 +1,26 @@
 {
-  "uuid": "e51210ef-a9d8-4e10-904f-6d750926c521",
-  "shortName": "PebbleCalculator",
-  "longName": "PebbleCalculator",
-  "companyName": "Nikhil Lele",
-  "versionCode": 1,
-  "versionLabel": "1.0",
-  "sdkVersion": "3",
-  "targetPlatforms": ["aplite", "basalt"],
-  "watchapp": {
-    "watchface": false
-  },
-  "appKeys": {
-    "dummy": 0
-  },
-  "resources": {
-    "media": []
-  }
+    "appKeys": {
+        "dummy": 0
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Nikhil Lele",
+    "longName": "PebbleCalculator",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "sdkVersion": "3",
+    "shortName": "PebbleCalculator",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "e51210ef-a9d8-4e10-904f-6d750926c521",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": false
+    }
 }

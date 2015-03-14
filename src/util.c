@@ -25,9 +25,11 @@ void PopulateOperatorList(ElementList *list) {
   elems[7].ch = ')';
 
   list->elems = elems;
+  list->numElems = 8;
+  list->currElem = 0;
 }
 
-void PopulateNumberList(ElementList *list) {
+void PopulateDigitList(ElementList *list) {
   Element *elems = (Element *) malloc(20); // TODO check size
 
   for (int i = 0; i < 10; ++i) {
@@ -45,8 +47,10 @@ void PopulateNumberList(ElementList *list) {
   elems[8].ch = '8';
   elems[9].ch = '9';
 
-
   list->elems = elems;
+  
+  list->numElems = 10;
+  list->currElem = 0;
 }
 
 void DeleteElementList(ElementList *list) {

@@ -26,6 +26,9 @@ typedef struct
   Element *elems; // array of elements
 } Query;
 
+// Computes the expression provided
+double Compute(Query *query);
+
 // circular buffer of elements
 typedef struct
 {
@@ -33,5 +36,20 @@ typedef struct
   uint8_t currElem;
   uint8_t numElems;
 } ElementList;
+
+// Populates the given list with all operators
+void PopulateOperatorList(ElementList *list);
+
+// Populates the given list with all digits
+void PopulateDigitList(ElementList *list);
+
+// Cleans up an element list
+void DeleteElementList(ElementList *list);
+
+// Get the current element
+Element *GetCurrElem(ElementList *list);
+
+// Move curr to next element and return the next element
+Element *GetNextElem(ElementList *list);
 
 #endif /* UTIL_H */
