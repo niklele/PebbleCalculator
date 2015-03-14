@@ -3,6 +3,8 @@
 
 #include <pebble.h>
 
+#define QUERY_MAX_SIZE 15
+  
 // numbers 0-9 are represented by 0-9
 #define PLUS 10
 #define MINUS 11
@@ -23,8 +25,16 @@ typedef struct
 // Query expression to be computed
 typedef struct
 {
-  Element *elems; // array of elements
+  Element elems[QUERY_MAX_SIZE];
+  uint8_t numElems;
 } Query;
+
+// Add an element to the end of the query
+// returns false if query is full
+bool QueryAdd(Query *query, Element *elem);
+
+// Convert Query to string for display
+char *ToString(Query *query);
 
 // Computes the expression provided
 double Compute(Query *query);

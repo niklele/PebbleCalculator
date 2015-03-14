@@ -79,6 +79,8 @@ static void init(void) {
 
 static void deinit(void) {
   window_destroy(window);
+  DeleteElementList(&s_digitList);
+  DeleteElementList(&s_operatorList);
 }
 
 int main(void) {

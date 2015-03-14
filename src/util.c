@@ -1,5 +1,24 @@
 #include "util.h"
 
+bool QueryAdd(Query *query, Element *elem) {
+  if (query->numElems == QUERY_MAX_SIZE) {
+    return false;
+  } else {
+    query->elems[query->numElems] = *elem;
+    query->numElems++;
+    return true;
+  }
+}
+
+char *ToString(Query *query) {
+  char *buf = (char *) malloc(query->numElems);
+  for (uint8_t i = 0; i < query->numElems; ++i) {
+    buf[i] = query->elems[i].ch;
+  }
+  buf[query->numElems] = '\0';
+  return buf;
+}
+
 double Compute(Query *query) {
   return 0.0;
 }
@@ -32,7 +51,7 @@ void PopulateOperatorList(ElementList *list) {
 void PopulateDigitList(ElementList *list) {
   Element *elems = (Element *) malloc(20); // TODO check size
 
-  for (int i = 0; i < 10; ++i) {
+  for (uint8_t i = 0; i < 10; ++i) {
     elems[i].id = i;
   }
   
@@ -54,7 +73,7 @@ void PopulateDigitList(ElementList *list) {
 }
 
 void DeleteElementList(ElementList *list) {
-  // cleanup all members
+  free(list->elems);
 }
 
 Element *GetCurrElem(ElementList *list) {

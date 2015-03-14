@@ -6,13 +6,13 @@
         ""
     ],
     "companyName": "Nikhil Lele",
-    "longName": "PebbleCalculator",
+    "longName": "Scrolling Calculator",
     "projectType": "native",
     "resources": {
         "media": []
     },
     "sdkVersion": "3",
-    "shortName": "PebbleCalculator",
+    "shortName": "ScrollCalc",
     "targetPlatforms": [
         "aplite",
         "basalt"
