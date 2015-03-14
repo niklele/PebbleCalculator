@@ -1,5 +1,5 @@
-#ifndef UTIL_H
-#define UTIL_H
+#ifndef EXPRESSION_H
+#define EXPRESSION_H
 
 #include <pebble.h>
 
@@ -30,7 +30,7 @@ typedef struct
 } Expression;
 
 // Add an element to the end of the Expression
-// returns false if Expression is full
+// returns false if expr is full
 bool ExpressionAdd(Expression *expr, Element *elem);
 
 // Convert Expression to string for display
@@ -39,7 +39,7 @@ char *ToString(Expression *expr);
 // Computes the expression provided
 double Compute(Expression *expr);
 
-// circular buffer of elements
+// circular buffer of elements for choice
 typedef struct
 {
   Element *elems;
@@ -62,4 +62,4 @@ Element *GetCurrElem(ElementList *list);
 // Move curr to next element and return the next element
 Element *GetNextElem(ElementList *list);
 
-#endif /* UTIL_H */
+#endif /* EXPRESSION_H */

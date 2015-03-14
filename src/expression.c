@@ -1,11 +1,11 @@
-#include "util.h"
+#include "expression.h"
 
 bool ExpressionAdd(Expression *expr, Element *elem) {
   if (expr->numElems == EXPRESSION_MAX_SIZE) {
     return false;
   } else {
-    Expression->elems[expr->numElems] = *elem;
-    Expression->numElems++;
+    expr->elems[expr->numElems] = *elem;
+    expr->numElems++;
     return true;
   }
 }
