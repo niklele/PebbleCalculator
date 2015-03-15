@@ -6,8 +6,8 @@ static TextLayer *DigitLayer;
 static TextLayer *QueryLayer;
 static TextLayer *OperatorLayer;
 
-static ElementList s_digitList;
-static ElementList s_operatorList;
+static CircularBuffer s_digitList;
+static CircularBuffer s_operatorList;
 
 static void select_click_handler(ClickRecognizerRef recognizer, void *context) {
   text_layer_set_text(DigitLayer, "Select");
@@ -79,8 +79,8 @@ static void init(void) {
 
 static void deinit(void) {
   window_destroy(window);
-  DeleteElementList(&s_digitList);
-  DeleteElementList(&s_operatorList);
+  DeleteCircularBuffer(&s_digitList);
+  DeleteCircularBuffer(&s_operatorList);
 }
 
 int main(void) {

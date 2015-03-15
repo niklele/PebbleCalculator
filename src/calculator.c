@@ -1,90 +1,150 @@
 #include "calculator.h"
 
-bool ExpressionAdd(Expression *expr, Element *elem) {
-  if (expr->numElems == EXPRESSION_MAX_SIZE) {
-    return false;
-  } else {
-    expr->elems[expr->numElems] = *elem;
-    expr->numElems++;
-    return true;
-  }
-}
-
-char *ToString(Expression *expr) {
-  char *buf = (char *) malloc(expr->numElems);
-  for (uint8_t i = 0; i < expr->numElems; ++i) {
-    buf[i] = expr->elems[i].ch;
-  }
-  buf[expr->numElems] = '\0';
-  return buf;
-}
-
-double Compute(Expression *expr) {
+double Compute(char *query) {
+  Expression expr;
+  Convert(query, &expr);
   return 0.0;
 }
 
-void PopulateOperatorList(ElementList *list) {
-  Element *elems = (Element *) malloc(16); // TODO check size
-
-  elems[0].id = PLUS;
-  elems[0].ch = '+';
-  elems[1].id = MINUS;
-  elems[1].ch = '-';
-  elems[2].id = MULTIPLY;
-  elems[2].ch = '*';
-  elems[3].id = DIVIDE;
-  elems[3].ch = '/';
-  elems[4].id = PERCENT;
-  elems[4].ch = '%';
-  elems[5].id = POINT;
-  elems[5].ch = '.';
-  elems[6].id = LPAREN;
-  elems[6].ch = '(';
-  elems[7].id = RPAREN;
-  elems[7].ch = ')';
-
-  list->elems = elems;
-  list->numElems = 8;
-  list->currElem = 0;
-}
-
-void PopulateDigitList(ElementList *list) {
-  Element *elems = (Element *) malloc(20); // TODO check size
-
-  for (uint8_t i = 0; i < 10; ++i) {
-    elems[i].id = i;
+uint8_t charType(char ch) {
+  switch(ch) {
+    case PLUS:
+    case MINUS:
+    case MULTIPLY:
+    case DIVIDE:
+    case PERCENT:
+    case LPAREN:
+    case RPAREN:
+      return TYPE_OPERATOR;
+    case '0':
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+    case '5':
+    case '6':
+    case '7':
+    case '8':
+    case '9':
+      return TYPE_DIGIT;
+    case POINT:
+      return TYPE_POINT;
+    default:
+      return TYPE_OTHER:
   }
-  
-  elems[0].ch = '0';
-  elems[1].ch = '1';
-  elems[2].ch = '2';
-  elems[3].ch = '3';
-  elems[4].ch = '4';
-  elems[5].ch = '5';
-  elems[6].ch = '6';
-  elems[7].ch = '7';
-  elems[8].ch = '8';
-  elems[9].ch = '9';
-
-  list->elems = elems;
-  
-  list->numElems = 10;
-  list->currElem = 0;
 }
 
-void DeleteElementList(ElementList *list) {
-  free(list->elems);
+bool isdigit(char ch) {
+  return (charType(ch) == TYPE_DIGIT);
 }
 
-Element *GetCurrElem(ElementList *list) {
-  return &(list->elems[list->currElem]);
+double atof(char *s)
+{
+  double a = 0.0;
+  int e = 0;
+  int c;
+  while ((c = *s++) != '\0' && isdigit(c)) {
+    a = a*10.0 + (c - '0');
+  }
+  if (c == '.') {
+    while ((c = *s++) != '\0' && isdigit(c)) {
+      a = a*10.0 + (c - '0');
+      e = e-1;
+    }
+  }
+  if (c == 'e' || c == 'E') {
+    int sign = 1;
+    int i = 0;
+    c = *s++;
+    if (c == '+')
+      c = *s++;
+    else if (c == '-') {
+      c = *s++;
+      sign = -1;
+    }
+    while (isdigit(c)) {
+      i = i*10 + (c - '0');
+      c = *s++;
+    }
+    e += i*sign;
+  }
+  while (e > 0) {
+    a *= 10.0;
+    e--;
+  }
+  while (e < 0) {
+    a *= 0.1;
+    e++;
+  }
+  return a;
 }
 
-Element *GetNextElem(ElementList *list) {
-  if (list->currElem == (list->numElems - 1)) {
-    list->currElem = 0;
+void Convert(char *query, Expression *expr) {
+// first populate the expression in infix notation, then convert to postfix
+
+  // uint8_t exprIndex = 0;
+  Token *curr = expr->tokens;
+  uint8_t numStart = 0;
+  for (uint8_t i = 0; i < strlen(query); ++i) {
+    uint8_t type = charType(query[i]);
+    if (type == TYPE_OPERATOR) {
+      curr->ch = query[i];
+      curr->val = 0;
+      curr++;
+    } else if (type == TYPE_DIGIT) {
+      curr->ch = 0;
+      // add based on place and also needs to take decimal point into account
+    } else if (type == TYPE_POINT) {
+
+    } else {
+      // ignore the character
+    }
+  }
+}
+
+void PopulateOperatorList(CircularBuffer *buffer) {
+  buffer->buff = (char *) malloc(8); // NB no null terminator
+  buffer->buff[0] = PLUS;
+  buffer->buff[1] = MINUS;
+  buffer->buff[2] = MULTIPLY;
+  buffer->buff[3] = DIVIDE;
+  buffer->buff[4] = PERCENT;
+  buffer->buff[5] = POINT;
+  buffer->buff[6] = LPAREN;
+  buffer->buff[7] = RPAREN;
+  buffer->size = 8;
+  buffer->curr = 0;
+}
+
+void PopulateDigitList(CircularBuffer *buffer) {
+  buffer->buff = (char *) malloc(10); // NB no null terminator
+  buffer->buff[0] = '0';
+  buffer->buff[1] = '1';
+  buffer->buff[2] = '2';
+  buffer->buff[3] = '3';
+  buffer->buff[4] = '4';
+  buffer->buff[5] = '5';
+  buffer->buff[6] = '6';
+  buffer->buff[7] = '7';
+  buffer->buff[8] = '8';
+  buffer->buff[9] = '9';
+  buffer->size = 10;
+  buffer->curr = 0;
+}
+
+void DeleteCircularBuffer(CircularBuffer *buffer) {
+  free(buffer->buff);
+}
+
+Element *GetCurrElem(CircularBuffer *buffer) {
+  return &(buffer->buff[buffer->curr]);
+}
+
+Element *GetNextElem(CircularBuffer *buffer) {
+  if (buffer->curr == (buffer->size - 1)) {
+    buffer->curr = 0;
   } else {
-    list->currElem++;
+    buffer->curr++;
   }
-  return &(list->elems[list->currElem]);
+  return &(buffer->buff[buffer->curr]);
 }

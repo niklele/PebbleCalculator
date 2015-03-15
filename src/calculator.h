@@ -3,63 +3,65 @@
 
 #include <pebble.h>
 
-#define EXPRESSION_MAX_SIZE 15
+#define QUERY_MAX_SIZE 20
+#define EXPRESSION_MAX_SIZE 20
 
-// numbers 0-9 are represented by 0-9
-#define PLUS 10
-#define MINUS 11
-#define MULTIPLY 12
-#define DIVIDE 13
-#define PERCENT 14
-#define POINT 15
-#define LPAREN 16
-#define RPAREN 17
+#define PLUS '+'
+#define MINUS '-'
+#define MULTIPLY '*'
+#define DIVIDE '/'
+#define PERCENT '%'
+#define POINT '.'
+#define LPAREN '('
+#define RPAREN ')'
 
-// Single input. Note: numbers are only single digits.
+#define TYPE_OPERATOR 0
+#define TYPE_DIGIT 1
+#define TYPE_POINT 2
+#define TYPE_OTHER 3
+
+uint8_t charType(char ch);
+
 typedef struct
 {
-  uint8_t id; // code as defined above
-  char ch; // displayed char
-} Element;
+  char ch; // operator or 0 to use value
+  float val;
+} Token;
 
-// Query expression to be computed
+// final postfix expression to be computed
 typedef struct
 {
-  Element elems[EXPRESSION_MAX_SIZE];
-  uint8_t numElems;
+  Token tokens[EXPRESSION_MAX_SIZE];
+  uint8_t size;
 } Expression;
 
-// Add an element to the end of the Expression
-// returns false if expr is full
-bool ExpressionAdd(Expression *expr, Element *elem);
+// Computes the query provided
+double Compute(char *query);
 
-// Convert Expression to string for display
-char *ToString(Expression *expr);
+// Convert from infix query to postfix (RPN) expression
+void Convert(char *query, Expression *expr);
 
-// Computes the expression provided
-double Compute(Expression *expr);
-
-// circular buffer of elements for choice
+// circular buffer of chars
 typedef struct
 {
-  Element *elems;
-  uint8_t currElem;
-  uint8_t numElems;
-} ElementList;
+  char *buff;
+  uint8_t curr;
+  uint8_t size;
+} CircularBuffer;
 
-// Populates the given list with all operators
-void PopulateOperatorList(ElementList *list);
+// Populates the given buffer with all operators
+void PopulateOperatorList(CircularBuffer *buffer);
 
-// Populates the given list with all digits
-void PopulateDigitList(ElementList *list);
+// Populates the given buffer with all digits
+void PopulateDigitList(CircularBuffer *buffer);
 
-// Cleans up an element list
-void DeleteElementList(ElementList *list);
+// Cleans up a circular buffer
+void DeleteCircularBuffer(CircularBuffer *buffer);
 
-// Get the current element
-Element *GetCurrElem(ElementList *list);
+// Get the current char
+Element *GetCurrElem(CircularBuffer *buffer);
 
-// Move curr to next element and return the next element
-Element *GetNextElem(ElementList *list);
+// Move curr to next char and return the next char
+Element *GetNextElem(CircularBuffer *buffer);
 
 #endif /* CALCULATOR_H */
