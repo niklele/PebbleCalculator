@@ -1,5 +1,5 @@
-#ifndef EXPRESSION_H
-#define EXPRESSION_H
+#ifndef CALCULATOR_H
+#define CALCULATOR_H
 
 #include <pebble.h>
 
@@ -62,4 +62,4 @@ Element *GetCurrElem(ElementList *list);
 // Move curr to next element and return the next element
 Element *GetNextElem(ElementList *list);
 
-#endif /* EXPRESSION_H */
+#endif /* CALCULATOR_H */

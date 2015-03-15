@@ -1,5 +1,5 @@
 #include <pebble.h>
-#include "expression.h"
+#include "calculator.h"
 
 static Window *window;
 static TextLayer *DigitLayer;
