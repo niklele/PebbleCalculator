@@ -59,9 +59,9 @@ void PopulateDigitList(CircularBuffer *buffer);
 void DeleteCircularBuffer(CircularBuffer *buffer);
 
 // Get the current char
-Element *GetCurrElem(CircularBuffer *buffer);
+char *GetCurr(CircularBuffer *buffer);
 
 // Move curr to next char and return the next char
-Element *GetNextElem(CircularBuffer *buffer);
+char *GetNext(CircularBuffer *buffer);
 
 #endif /* CALCULATOR_H */

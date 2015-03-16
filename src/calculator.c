@@ -30,74 +30,87 @@ uint8_t charType(char ch) {
     case POINT:
       return TYPE_POINT;
     default:
-      return TYPE_OTHER:
+      return TYPE_OTHER;
   }
 }
 
-bool isdigit(char ch) {
-  return (charType(ch) == TYPE_DIGIT);
-}
+// bool isdigit(char ch) {
+//   return (charType(ch) == TYPE_DIGIT);
+// }
 
-double atof(char *s)
-{
-  double a = 0.0;
-  int e = 0;
-  int c;
-  while ((c = *s++) != '\0' && isdigit(c)) {
-    a = a*10.0 + (c - '0');
-  }
-  if (c == '.') {
-    while ((c = *s++) != '\0' && isdigit(c)) {
-      a = a*10.0 + (c - '0');
-      e = e-1;
-    }
-  }
-  if (c == 'e' || c == 'E') {
-    int sign = 1;
-    int i = 0;
-    c = *s++;
-    if (c == '+')
-      c = *s++;
-    else if (c == '-') {
-      c = *s++;
-      sign = -1;
-    }
-    while (isdigit(c)) {
-      i = i*10 + (c - '0');
-      c = *s++;
-    }
-    e += i*sign;
-  }
-  while (e > 0) {
-    a *= 10.0;
-    e--;
-  }
-  while (e < 0) {
-    a *= 0.1;
-    e++;
-  }
-  return a;
-}
+// double atof(char *s)
+// {
+//   double a = 0.0;
+//   int e = 0;
+//   int c;
+//   while ((c = *s++) != '\0' && isdigit(c)) {
+//     a = a*10.0 + (c - '0');
+//   }
+//   if (c == '.') {
+//     while ((c = *s++) != '\0' && isdigit(c)) {
+//       a = a*10.0 + (c - '0');
+//       e = e-1;
+//     }
+//   }
+//   if (c == 'e' || c == 'E') {
+//     int sign = 1;
+//     int i = 0;
+//     c = *s++;
+//     if (c == '+')
+//       c = *s++;
+//     else if (c == '-') {
+//       c = *s++;
+//       sign = -1;
+//     }
+//     while (isdigit(c)) {
+//       i = i*10 + (c - '0');
+//       c = *s++;
+//     }
+//     e += i*sign;
+//   }
+//   while (e > 0) {
+//     a *= 10.0;
+//     e--;
+//   }
+//   while (e < 0) {
+//     a *= 0.1;
+//     e++;
+//   }
+//   return a;
+// }
 
 void Convert(char *query, Expression *expr) {
 // first populate the expression in infix notation, then convert to postfix
 
+// TODO replace index forloop with pointers
+
   // uint8_t exprIndex = 0;
-  Token *curr = expr->tokens;
-  uint8_t numStart = 0;
+  Token *currToken = expr->tokens;
+  char *numberStart = NULL;
+  char *numberEnd = NULL;
+
   for (uint8_t i = 0; i < strlen(query); ++i) {
     uint8_t type = charType(query[i]);
     if (type == TYPE_OPERATOR) {
-      curr->ch = query[i];
-      curr->val = 0;
-      curr++;
+      currToken->ch = query[i];
+      currToken->val = 0;
+      currToken++;
+
+      if (numberStart) {
+        numberEnd = &query[i]; // points to last char not +1
+      }
     } else if (type == TYPE_DIGIT) {
-      curr->ch = 0;
+      currToken->ch = 0;
+      numberStart = &query[i];
       // add based on place and also needs to take decimal point into account
     } else if (type == TYPE_POINT) {
 
     } else {
       // ignore the character
+    }
+
+    if (numberStart && numberEnd) {
+      // atof but need to add a \0
     }
   }
 }
@@ -136,11 +149,11 @@ void DeleteCircularBuffer(CircularBuffer *buffer) {
   free(buffer->buff);
 }
 
-Element *GetCurrElem(CircularBuffer *buffer) {
+char *GetCurr(CircularBuffer *buffer) {
   return &(buffer->buff[buffer->curr]);
 }
 
-Element *GetNextElem(CircularBuffer *buffer) {
+char *GetNext(CircularBuffer *buffer) {
   if (buffer->curr == (buffer->size - 1)) {
     buffer->curr = 0;
   } else {
