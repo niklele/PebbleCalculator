@@ -110,7 +110,13 @@ void Convert(char *query, Expression *expr) {
     }
 
     if (numberStart && numberEnd) {
-      // atof but need to add a \0
+      // copy into buffer for atof
+      uint8_t len = (numberEnd - numberStart) + 1;
+      char buf[len+1] = {0};
+      strncpy(buf, numberStart, len);
+      currToken->ch = 0;
+      currToken->val = atof(buf);
+      currToken++;
     }
   }
 }
